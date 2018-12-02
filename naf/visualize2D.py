@@ -8,7 +8,7 @@ Created on Mon Aug 13 18:43:23 2018
 
 import numpy as np
 import matplotlib.pyplot as plt
-from DensityEstimator import DensityEstimator
+from .DensityEstimator import DensityEstimator
 from torch.autograd import Variable
 import torch
 

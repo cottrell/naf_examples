@@ -7,7 +7,7 @@ Created on Mon Aug 13 18:45:34 2018
 """
 
 
-from torchkit import flows, nn as nn_, utils
+from .torchkit import flows, nn as nn_, utils
 from torch import optim, nn
 from torch.autograd import Variable
 import torch
@@ -86,7 +86,7 @@ class DensityEstimator(object):
             self.optim.step()
             
             if ((it + 1) % 100) == 0 and verbose:
-                print 'Iteration: [%4d/%4d] loss: %.8f' % \
-                    (it+1, total, loss.data[0])
+                print('Iteration: [%4d/%4d] loss: %.8f' % \
+                    (it+1, total, loss.data[0]))
             
             
