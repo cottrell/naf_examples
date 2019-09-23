@@ -7,7 +7,6 @@ Created on Mon Aug 13 18:41:30 2018
 """
 
 
-
 from . import distributions
 from .DensityEstimator import DensityEstimator
 from .visualize2D import visualize2D

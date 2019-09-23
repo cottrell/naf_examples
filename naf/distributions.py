@@ -7,7 +7,6 @@ Created on Fri Jul 20 17:13:18 2018
 """
 
 
-
 from sklearn.datasets import make_swiss_roll
 from scipy.stats import multivariate_normal
 import numpy as np
@@ -15,22 +14,23 @@ import torch
 
 
 class Distr(object):
-    
+
     hasenergyf = False
     hassplr = False
-    
+
     def energy(self, x):
         raise NotImplementedError
-    
+
     def sampler(self, x):
         raise NotImplementedError
+
 
 class Mixture(Distr):
     """Makes a probabilistic mixture out of any distr_list where distr implements rvs and pdf."""
 
     hasenergyf = True
     hassplr = True
-    
+
     def __init__(self, probs, distr_list):
         self.probs = np.asarray(probs)
         self.distr_list = distr_list
@@ -54,44 +54,40 @@ class Mixture(Distr):
 
 
 class SwissRoll(Distr):
-    
+
     hasenergyf = False
     hassplr = True
-    
+
     def __init__(self, noise=0.5):
         self.noise = noise
-        
+
     def sampler(self, n):
         return torch.from_numpy(
-            make_swiss_roll(n, self.noise)[0][:,[0,2]].astype('float32') / 3.)
+            make_swiss_roll(n, self.noise)[0][:, [0, 2]].astype('float32') / 3.)
 
 
 class TenByTen(Mixture):
-    
+
     def __init__(self):
-        
+
         nmodesperdim = 10
-        grid = np.linspace(-5,5,nmodesperdim)
-        grid = np.meshgrid(grid,grid)
-        grid = np.concatenate([grid[0].reshape(nmodesperdim**2,1),
-                               grid[1].reshape(nmodesperdim**2,1)],1)
-        
+        grid = np.linspace(-5, 5, nmodesperdim)
+        grid = np.meshgrid(grid, grid)
+        grid = np.concatenate([grid[0].reshape(nmodesperdim**2, 1),
+                               grid[1].reshape(nmodesperdim**2, 1)], 1)
+
         super(TenByTen, self).__init__(
             np.ones(nmodesperdim**2) / float(nmodesperdim**2),
             [multivariate_normal(mean, 1/float(nmodesperdim*np.log(nmodesperdim))) for mean in grid])
-    
+
 
 class FourDiamond(Mixture):
-    
+
     def __init__(self):
-        
+
         super(FourDiamond, self).__init__(
-            [0.1, 0.3, 0.4, 0.2], 
+            [0.1, 0.3, 0.4, 0.2],
             [multivariate_normal([-5., 0]),
              multivariate_normal([5., 0]),
              multivariate_normal([0, 5.]),
              multivariate_normal([0, -5.])])
-    
-    
-    
-                            
